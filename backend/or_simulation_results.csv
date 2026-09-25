@@ -1,0 +1,13 @@
+Method,Round,New Arrivals,Still Waiting (end of round),Bed Utilization %,Max Rounds Waited (any patient)
+OR,1,14,0,56.0,0
+OR,2,14,0,96.0,0
+OR,3,14,7,100.0,1
+OR,4,14,7,100.0,2
+OR,5,14,7,100.0,3
+OR,6,14,14,100.0,4
+FCFS,1,14,0,56.0,0
+FCFS,2,14,0,96.0,0
+FCFS,3,14,7,100.0,1
+FCFS,4,14,7,100.0,1
+FCFS,5,14,7,100.0,1
+FCFS,6,14,14,100.0,1

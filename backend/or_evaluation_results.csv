@@ -1,0 +1,7 @@
+Scenario,Method,Assignment Rate %,Priority Compliance %,ESI Breakdown (assigned/total),Ward Match Compliance %,Objective Value,Solve Time (s)
+Low load (15 patients),OR (ESI-weighted),100.0,100.0,ESI1: 1/1 | ESI2: 5/5 | ESI3: 8/8 | ESI4: 1/1,100.0,0,1.428
+Low load (15 patients),FCFS baseline,100.0,100.0,ESI1: 1/1 | ESI2: 5/5 | ESI3: 8/8 | ESI4: 1/1,100.0,0,0.15
+Medium load (25 patients),OR (ESI-weighted),100.0,100.0,ESI1: 2/2 | ESI2: 12/12 | ESI3: 9/9 | ESI4: 2/2,100.0,0,2.145
+Medium load (25 patients),FCFS baseline,100.0,100.0,ESI1: 2/2 | ESI2: 12/12 | ESI3: 9/9 | ESI4: 2/2,100.0,0,0.145
+High load (40 patients),OR (ESI-weighted),62.5,100.0,ESI1: 3/3 | ESI2: 17/17 | ESI3: 5/17 | ESI4: 0/3,100.0,255,4.057
+High load (40 patients),FCFS baseline,62.5,6.7,ESI1: 2/3 | ESI2: 12/17 | ESI3: 9/17 | ESI4: 2/3,100.0,515,0.153

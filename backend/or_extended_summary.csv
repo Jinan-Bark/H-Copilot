@@ -1,0 +1,4 @@
+Method,Total Starvation Cases,Starvation Cases Involving Critical (ESI1-2) Patients,Avg Length of Stay (hrs),Final Bed Utilization %,Final Staff Utilization %
+FCFS baseline,35,17,7.8,100.0,41.7
+"OR (current, deployed)",35,0,7.8,100.0,58.3
+"OR + Aging (proposed, NOT deployed)",35,0,7.8,100.0,66.7

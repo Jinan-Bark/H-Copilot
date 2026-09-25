@@ -1,0 +1,57 @@
+.chart-container {
+  background-color: #1a2332;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.day-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 18px;
+  background-color: #1a2332;
+  border: 1px solid #2a3548;
+  border-radius: 10px;
+  color: #8892a6;
+  cursor: pointer;
+  min-width: 90px;
+  transition: all 0.2s;
+}
+
+.day-tab:hover {
+  border-color: #0096ff;
+}
+
+.day-tab.active {
+  background-color: #0096ff;
+  border-color: #0096ff;
+  color: #fff;
+}
+
+.day-tab-date {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.day-tab-total {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.predicted-value, .buffer-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buffer-value {
+  color: #f59e0b;
+}
