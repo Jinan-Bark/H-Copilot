@@ -4,9 +4,12 @@ H-Copilot OR Extended Evaluation: Aging Mechanism + Full Metric Set
 Compares 3 methods across the same multi-round simulation:
   1. FCFS baseline (no priority awareness)
   2. Current OR (ESI-weighted, as actually deployed)
-  3. OR + Aging (a TESTED enhancement, NOT deployed to the live platform --
-     increases a waiting patient's effective priority the longer they wait,
-     to prevent the low-acuity starvation found in the earlier simulation)
+  3. OR + Aging (the same threshold-gated aging formula deployed in
+     optimizer.py, evaluated here via simulation rather than live
+     platform use -- increases a waiting patient's effective priority
+     only after they exceed their own acuity-specific wait threshold,
+     to prevent the low-acuity starvation found in the earlier
+     simulation)
 
 Adds the metrics used across the 5 reviewed OR papers that were not yet
 covered: total waiting time (hours), average length of stay (hours),
@@ -19,12 +22,12 @@ import numpy as np
 import pandas as pd
 import pulp
 
-from optimizer import acuity_weight, parse_wards, covers_ward
+from optimizer import acuity_weight, max_wait_minutes, parse_wards, covers_ward
 from evaluate_or import run_fcfs
 from simulate_or import build_round_arrivals, N_ROUNDS, NEW_ARRIVALS_PER_ROUND, STARVATION_THRESHOLD
 
 HOURS_PER_ROUND = 4  # matches the platform's 4-hour flow-prediction slot convention
-AGING_FACTOR = 15    # weight added per round already waited
+AGING_RATE_PER_HOUR = 3.75  # same rate as the deployed optimizer.py
 
 
 # ---------------------------------------------------------------------------
@@ -70,11 +73,21 @@ def run_optimizer_aging(patients_df, beds_df, nurses_df, doctors_df, shift, grou
             model += z[i, d] <= (pulp.lpSum(x[i, j] for j in vb) if vb else 0)
         model += pulp.lpSum(z[i, d] for d in D) == pulp.lpSum(x[i, j] for j in B)
 
-    # --- Effective weight = base ESI weight + aging bonus for time already waited ---
+    # --- Effective weight = base ESI weight + threshold-gated aging bonus,
+    # matching the deployed optimizer.py formula exactly: zero bonus until
+    # the patient's own acuity-specific wait threshold is exceeded, then
+    # 3.75 points per hour of overshoot. Rounds waited are converted to
+    # minutes using the 4-hour round length. ---
     def effective_weight(patient):
-        base = acuity_weight.get(int(patient['acuity']), 1)
-        bonus = wait_counters.get(str(int(patient['stay_id'])), 0) * AGING_FACTOR
-        return base + bonus
+        acuity = int(patient['acuity'])
+        base = acuity_weight.get(acuity, 1)
+        rounds_waited = wait_counters.get(str(int(patient['stay_id'])), 0)
+        minutes_waited = rounds_waited * HOURS_PER_ROUND * 60
+        threshold_min = max_wait_minutes.get(acuity, 60)
+        if minutes_waited <= threshold_min:
+            return base
+        overshoot_hours = (minutes_waited - threshold_min) / 60
+        return base + overshoot_hours * AGING_RATE_PER_HOUR
 
     model += pulp.lpSum(
         effective_weight(patients.loc[i]) * (1 - pulp.lpSum(x[i, j] for j in B))
@@ -209,8 +222,8 @@ if __name__ == '__main__':
     doctors_df = doctors_df.rename(columns={'intern_or_not': 'is_intern'})
     doctors_df['is_intern'] = doctors_df['is_intern'] == 'intern'
     doctors_df['doctor_id'] = range(1, len(doctors_df) + 1)
-    triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
-    triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
+    triage_df = pd.read_excel(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\triage.xlsx")
+
     from optimizer import run_optimizer
 
     all_summaries = []
