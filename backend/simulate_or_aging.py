@@ -209,8 +209,8 @@ if __name__ == '__main__':
     doctors_df = doctors_df.rename(columns={'intern_or_not': 'is_intern'})
     doctors_df['is_intern'] = doctors_df['is_intern'] == 'intern'
     doctors_df['doctor_id'] = range(1, len(doctors_df) + 1)
-    triage_df = pd.read_excel(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\triage.xlsx")
-
+    triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
+    triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
     from optimizer import run_optimizer
 
     all_summaries = []

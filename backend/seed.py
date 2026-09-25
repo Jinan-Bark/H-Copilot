@@ -70,7 +70,8 @@ def seed_data():
         print(f"✅ Seeded {len(doctors_df)} doctors")
 
         # ── Seed Patients ──────────────────────────────────────
-        triage_df = pd.read_excel(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\triage.xlsx")
+        triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
+        triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
         triage_df = triage_df.dropna(subset=['acuity'])
         triage_df['acuity'] = triage_df['acuity'].astype(int)
 

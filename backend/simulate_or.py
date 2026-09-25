@@ -117,8 +117,9 @@ if __name__ == '__main__':
     doctors_df = doctors_df.rename(columns={'intern_or_not': 'is_intern'})
     doctors_df['is_intern'] = doctors_df['is_intern'] == 'intern'
     doctors_df['doctor_id'] = range(1, len(doctors_df) + 1)
-    triage_df = pd.read_excel(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\triage.xlsx")
-
+    triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
+    triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
+    
     print("=== Running simulation: OR (ESI-weighted) ===")
     or_log, or_starvation = run_simulation(beds_df, nurses_df, doctors_df, triage_df, run_optimizer, 'OR')
     print(or_log.to_string(index=False))
