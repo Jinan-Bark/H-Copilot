@@ -29,7 +29,7 @@ Both layers are integrated into an implemented, full-stack platform (**React**, 
 
 | I want to... | Go to |
 |---|---|
-| **Run the flow prediction training** | `notebooks/` |
+| **Run the flow prediction training** | `notebooks/patient_flow_prediction` |
 | **Understand the forecasting model** | Forecasting code / notebook |
 | **Understand the resource optimizer** | `backend/optimizer/` |
 | **Understand the workload-balancing extension** | `workload_balancing.py` |
