@@ -1,9 +1,10 @@
+[README.md](https://github.com/user-attachments/files/32667632/README.md)
 
-# H-Copilot — Data Engineering and Predictive Modeling for a Hospital Decision Support Platform
+# H-Copilot, Data Engineering and Predictive Modeling for a Hospital Decision Support Platform
 
 Research codebase for the M.Sc. Data Science thesis:
 **"Data Engineering and Predictive Modeling for a Hospital Decision Support Platform (H-Copilot)"**
-Jinan Bark — Lebanese University, Faculty of Sciences — 2026
+Jinan Bark, Lebanese University, Faculty of Sciences, 2026
 
 H-Copilot is a **two-layer AI-powered ED bed and staff assignment platform** combining a proactive prediction layer with a reactive optimization layer. The prediction layer forecasts patient arrivals in upcoming **4-hour time slots** using a blended Random Forest / Neural Network ensemble; the optimization layer formulates bed, nurse, and doctor assignment as a **Binary Integer Program** solved with PuLP/CBC, re-optimizing automatically on every patient discharge.
 
@@ -17,9 +18,9 @@ H-Copilot is a **two-layer AI-powered ED bed and staff assignment platform** com
 | Prediction WAPE | **20.70%** | modest, statistically-supported gain over naive (p = 0.0068) |
 | Priority compliance (high demand) | **100%** | 6.7% (First-Come-First-Served) |
 | Critical-patient starvation cases | **0** | 17 (First-Come-First-Served) |
-| Low-acuity starvation (12h aging threshold) | **0** | — (critical-patient protection unaffected) |
+| Low-acuity starvation (12h aging evaluation window) | **0** | not applicable (critical-patient protection unaffected) |
 
-The final prediction model is a blended Random Forest / Neural Network ensemble, validated through walk-forward (rolling-origin) evaluation with periodic retraining, multiple naive baselines, permutation testing, and cross-validation. The optimization layer's threshold-gated aging mechanism lets waiting time influence assignment priority indirectly, mitigating the starvation risk that strict acuity-based prioritization would otherwise introduce — without weakening critical-patient protection. A tested workload-balancing extension also reduces maximum individual staff caseload, within staffing constraints.
+The final prediction model is a blended Random Forest / Neural Network ensemble, validated through walk-forward (rolling-origin) evaluation with periodic retraining, multiple naive baselines, permutation testing, and cross-validation. The optimization layer's threshold-gated aging mechanism lets waiting time influence assignment priority indirectly, mitigating the starvation risk that strict acuity-based prioritization would otherwise introduce, without weakening critical-patient protection. A tested workload-balancing extension also reduces maximum individual staff caseload, within staffing constraints.
 
 Both layers are integrated into an implemented, full-stack platform (**React**, **FastAPI**, **PostgreSQL**), with a manual retraining endpoint allowing the prediction model to be refreshed on demand as new real platform data accumulates.
 
@@ -31,8 +32,8 @@ Both layers are integrated into an implemented, full-stack platform (**React**, 
 |---|---|
 | **Run the flow prediction training** | `notebooks/patient_flow_prediction` |
 | **Understand the forecasting model** | Forecasting code / notebook |
-| **Understand the resource optimizer** | `backend/optimizer/` |
-| **Understand the workload-balancing extension** | `workload_balancing.py` |
+| **Understand the resource optimizer** | `backend/optimizer.py` |
+| **Understand the workload-balancing extension** | `backend/workload_balancing.py` |
 | **Understand database integration** | `backend/database.py` |
 | **Run the platform** | `backend/` and `frontend/` |
 
@@ -47,9 +48,14 @@ H-Copilot/
 │   ├── venv/                   Python virtual environment (not tracked)
 │   ├── database.py             PostgreSQL / SQLAlchemy connection
 │   ├── main.py                 FastAPI entry point
-│   ├── forecasting/            Patient flow prediction
-│   ├── optimizer/              Resource optimization (PuLP/CBC)
-│   └── ...
+│   ├── models.py                Database models
+│   ├── optimizer.py            Resource optimization (PuLP/CBC)
+│   ├── evaluate_or.py          OR vs. FCFS evaluation
+│   ├── simulate_or.py          Multi-round starvation simulation
+│   ├── simulate_or_aging.py    Multi-round simulation with aging
+│   ├── workload_balancing.py   Workload-balancing extension
+│   ├── seed.py                 Database seed data
+│   └── ml/                     Trained models and forecasting code
 │
 ├── frontend/                   React platform interface
 │   └── ...
@@ -57,9 +63,7 @@ H-Copilot/
 ├── notebooks/                  Model development and training
 │   └── ...
 │
-├── workload_balancing.py       Standalone workload-balancing component
 ├── .gitignore
-├── .env.example
 └── README.md
 ```
 
@@ -154,11 +158,11 @@ Current optimization scope:
 
 ### Aging Mechanism
 
-Waiting time influences assignment priority indirectly through a **threshold-gated aging mechanism** (12-hour threshold tested), mitigating the starvation risk that strict acuity-based prioritization would otherwise introduce for low-acuity patients — without weakening critical-patient protection.
+Waiting time influences assignment priority indirectly through a **threshold-gated aging mechanism**, using clinically-defined per-acuity wait thresholds (0/15/30/60/120 minutes for ESI 1 through 5), mitigating the starvation risk that strict acuity-based prioritization would otherwise introduce for low-acuity patients, without weakening critical-patient protection. Low-acuity starvation was evaluated using a 12-hour simulation window.
 
 ### Workload Balancing
 
-A separate workload-balancing extension (`workload_balancing.py`) demonstrates a measurable, though staffing-constrained, reduction in maximum individual caseload across staff members.
+A separate workload-balancing extension (`workload_balancing.py`) demonstrates a measurable, though staffing-constrained, reduction in maximum individual caseload across staff members. This extension is tested and validated, but not currently part of the deployed live system.
 
 ---
 
@@ -175,25 +179,32 @@ H-Copilot uses PostgreSQL with SQLAlchemy. The database supports operational inf
 - Predictions
 - Assignments
 
-During deployment, the platform retrieves current hospital information from the database rather than relying on sampled CSV files.
+During deployment, the platform retrieves current hospital information from the database rather than relying on sampled CSV files. `backend/seed.py` populates the database with sample data for local development and testing.
 
 ### Architecture
 
 ```text
 Hospital Database
-       ↓
+       |
+       v
 Current Patient / Resource Data
-       ↓
+       |
+       v
 Patient Flow Prediction
-       ↓
+       |
+       v
 Predicted Demand
-       ↓
+       |
+       v
 Resource Optimizer (PuLP/CBC)
-       ↓
+       |
+       v
 Generated Assignments
-       ↓
+       |
+       v
 Assignments Table
-       ↓
+       |
+       v
 Frontend
 ```
 
@@ -208,8 +219,9 @@ Frontend
 | M3 | Walk-Forward Evaluation | Chronological evaluation completed |
 | M4 | Forecasting Model | RF + NN blended model exported |
 | M5 | Resource Optimization | Nurse, doctor, and bed assignments generated |
-| M6 | Aging & Workload Balancing | Starvation-risk mitigation and caseload balancing validated |
-| M7 | Platform Integration | Prediction and optimization connected to database |
+| M6 | Aging Mechanism | Starvation-risk mitigation validated and deployed |
+| M7 | Workload Balancing | Caseload-balancing extension tested and validated (not yet deployed) |
+| M8 | Platform Integration | Prediction and optimization connected to database |
 
 ---
 
@@ -230,19 +242,22 @@ backend\venv\Scripts\activate
 # 2. Activate the virtual environment
 backend\venv\Scripts\activate
 
-# 3. Start the backend (FastAPI, default port 8000)
+# 3. Seed the database with sample data
 cd backend
+python seed.py
+
+# 4. Start the backend (FastAPI, default port 8000)
 uvicorn main:app --reload
 
-# 4. Start the frontend (React)
+# 5. Start the frontend (React)
 cd frontend
 npm run dev
 
-# 5. Run workload balancing when needed
+# 6. Run workload balancing when needed
 python workload_balancing.py
 ```
 
-> **Note:** The backend reads `DATABASE_URL` from `.env` via SQLAlchemy. The exact frontend port is not fixed and depends on your local Vite/CRA configuration. A confirmed `requirements.txt`, database migration step, and seed-data step are not yet established for this repository.
+> **Note:** The backend reads `DATABASE_URL` from `.env` via SQLAlchemy. The exact frontend port is not fixed and depends on your local Vite/CRA configuration. A confirmed `requirements.txt` and database migration step are not yet established for this repository.
 
 ### Running the Forecasting Notebook
 
@@ -257,22 +272,27 @@ The notebook performs:
 
 ```text
 Data Cleaning
-      ↓
+      |
+      v
 4-Hour Slot Construction
-      ↓
+      |
+      v
 Feature Engineering
-      ↓
+      |
+      v
 Walk-Forward Evaluation
-      ↓
+      |
+      v
 Final Model Training
-      ↓
+      |
+      v
 Model Export
 ```
 
 Generated artifacts:
 
-- `flow_prediction_model.pkl` — Random Forest model, Neural Network model, StandardScaler
-- `historical_flow_raw.csv` — historical flow information used by the prediction component
+- `flow_prediction_model.pkl`, Random Forest model, Neural Network model, StandardScaler
+- `historical_flow_raw.csv`, historical flow information used by the prediction component
 
 ---
 
@@ -286,7 +306,7 @@ Generated artifacts:
 6. Store predictions and assignments in the database
 7. Display results through the frontend
 
-The forecasting models are trained offline and loaded by the platform during deployment. They are not retrained for every prediction — a manual retraining endpoint is available instead.
+The forecasting models are trained offline and loaded by the platform during deployment. They are not retrained for every prediction; a manual retraining endpoint is available instead.
 
 ---
 
@@ -299,7 +319,7 @@ The forecasting models are trained offline and loaded by the platform during dep
 | Data Processing | Pandas, NumPy |
 | Database | PostgreSQL |
 | ORM | SQLAlchemy |
-| Optimization | Binary Integer Programming — PuLP / CBC |
+| Optimization | Binary Integer Programming (PuLP / CBC) |
 | Backend | FastAPI |
 | Frontend | React |
 | Model Development | Google Colab |
