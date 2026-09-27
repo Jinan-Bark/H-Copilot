@@ -32,12 +32,12 @@ def build_round_arrivals(triage_df, acuity_counts, round_num, seed=42):
             continue
         pool = triage_df[triage_df['acuity'] == level]
         n = min(count, len(pool))
-        sampled.append(pool.sample(n=n, random_state=seed + round_num))
+        sampled.append(pool.sample(n=n, random_state=seed * 10 + round_num))
     batch = pd.concat(sampled).reset_index(drop=True)
     # Keep stay_id numeric (optimizer.py casts it with int()) while still unique
     # per round: original_id * 1000 + round_num
     batch['stay_id'] = batch['stay_id'].astype(int) * 1000 + round_num
-    return batch.sample(frac=1, random_state=seed + round_num).reset_index(drop=True)
+    return batch.sample(frac=1, random_state=seed * 10 + round_num).reset_index(drop=True)
 
 
 def run_simulation(beds_df, nurses_df, doctors_df, triage_df, method_fn, method_name,

@@ -4,12 +4,9 @@ H-Copilot OR Extended Evaluation: Aging Mechanism + Full Metric Set
 Compares 3 methods across the same multi-round simulation:
   1. FCFS baseline (no priority awareness)
   2. Current OR (ESI-weighted, as actually deployed)
-  3. OR + Aging (the same threshold-gated aging formula deployed in
-     optimizer.py, evaluated here via simulation rather than live
-     platform use -- increases a waiting patient's effective priority
-     only after they exceed their own acuity-specific wait threshold,
-     to prevent the low-acuity starvation found in the earlier
-     simulation)
+  3. OR + Aging (a TESTED enhancement, NOT deployed to the live platform --
+     increases a waiting patient's effective priority the longer they wait,
+     to prevent the low-acuity starvation found in the earlier simulation)
 
 Adds the metrics used across the 5 reviewed OR papers that were not yet
 covered: total waiting time (hours), average length of stay (hours),
@@ -21,6 +18,7 @@ Run from backend/ (same folder as optimizer.py, evaluate_or.py, simulate_or.py).
 import numpy as np
 import pandas as pd
 import pulp
+from tqdm import tqdm 
 
 from optimizer import acuity_weight, max_wait_minutes, parse_wards, covers_ward
 from evaluate_or import run_fcfs
@@ -74,10 +72,9 @@ def run_optimizer_aging(patients_df, beds_df, nurses_df, doctors_df, shift, grou
         model += pulp.lpSum(z[i, d] for d in D) == pulp.lpSum(x[i, j] for j in B)
 
     # --- Effective weight = base ESI weight + threshold-gated aging bonus,
-    # matching the deployed optimizer.py formula exactly: zero bonus until
-    # the patient's own acuity-specific wait threshold is exceeded, then
-    # 3.75 points per hour of overshoot. Rounds waited are converted to
-    # minutes using the 4-hour round length. ---
+    # matching the deployed optimizer.py formula: zero bonus until the
+    # patient's own acuity-specific wait threshold is exceeded, then 3.75
+    # points per hour of overshoot. ---
     def effective_weight(patient):
         acuity = int(patient['acuity'])
         base = acuity_weight.get(acuity, 1)
@@ -176,9 +173,11 @@ def run_extended_simulation(beds_df, nurses_df, doctors_df, triage_df, method_na
         still_waiting = pool[~pool['stay_id'].astype(str).isin(assigned_ids)].copy()
         for sid in still_waiting['stay_id'].astype(str):
             wait_counters[sid] = wait_counters.get(sid, 0) + 1
-            if wait_counters[sid] >= STARVATION_THRESHOLD:
-                acuity = still_waiting[still_waiting['stay_id'].astype(str) == sid]['acuity'].values[0]
-                starvation_cases.append({'stay_id': sid, 'acuity': int(acuity), 'rounds_waited': wait_counters[sid], 'round': round_num})
+            acuity = int(still_waiting[still_waiting['stay_id'].astype(str) == sid]['acuity'].values[0])
+            minutes_waited = wait_counters[sid] * HOURS_PER_ROUND * 60
+            threshold_min = max_wait_minutes.get(acuity, 60)
+            if minutes_waited > threshold_min:
+                starvation_cases.append({'stay_id': sid, 'acuity': acuity, 'rounds_waited': wait_counters[sid], 'round': round_num})
         waiting_pool = still_waiting
 
         total_on_duty_staff = (
@@ -205,8 +204,12 @@ def run_extended_simulation(beds_df, nurses_df, doctors_df, triage_df, method_na
         'Method': method_name,
         'Total Starvation Cases': len(starvation_cases),
         'Starvation Cases Involving Critical (ESI1-2) Patients': sum(1 for c in starvation_cases if c['acuity'] <= 2),
+        'Starvation Cases Involving Low Acuity (ESI3-5) Patients': sum(1 for c in starvation_cases if c['acuity'] >= 3),
         'Final Bed Utilization %': round_log[-1]['Bed Utilization %'],
         'Final Staff Utilization %': round_log[-1]['Staff Utilization %'],
+        'Final Total Waiting Time (hrs, backlog)': round_log[-1]['Total Waiting Time (hrs, backlog)'],
+        'Final Max Rounds Waited': round_log[-1]['Max Rounds Waited'],
+        'Avg LOS (hrs)': avg_los_hours,
     }
 
     return pd.DataFrame(round_log), pd.DataFrame(starvation_cases), summary
@@ -221,22 +224,46 @@ if __name__ == '__main__':
     doctors_df = doctors_df.rename(columns={'intern_or_not': 'is_intern'})
     doctors_df['is_intern'] = doctors_df['is_intern'] == 'intern'
     doctors_df['doctor_id'] = range(1, len(doctors_df) + 1)
-    triage_df = pd.read_excel(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\triage.xlsx")
+    triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
+    triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
 
     from optimizer import run_optimizer
 
+    N_TRIALS = 200
     all_summaries = []
-    for method_name, use_aging, method_fn in [
-        ('FCFS baseline', False, run_fcfs),
-        ('OR (current, deployed)', False, run_optimizer),
-        ('OR + Aging (proposed, NOT deployed)', True, run_optimizer_aging),
-    ]:
-        print(f"\n=== {method_name} ===")
-        log_df, starv_df, summary = run_extended_simulation(beds_df, nurses_df, doctors_df, triage_df, method_name, use_aging, method_fn)
-        print(log_df.to_string(index=False))
-        all_summaries.append(summary)
 
-    print("\n\n=== SUMMARY COMPARISON ===")
-    print(pd.DataFrame(all_summaries).to_string(index=False))
-    pd.DataFrame(all_summaries).to_csv('or_extended_summary.csv', index=False)
-    print("\nSaved: or_extended_summary.csv")
+    for trial_seed in tqdm(range(N_TRIALS), desc="Simulating trials"):
+        for method_name, use_aging, method_fn in [
+            ('FCFS baseline', False, run_fcfs),
+            ('OR (current, deployed)', False, run_optimizer),
+            ('OR + Aging (proposed, NOT deployed)', True, run_optimizer_aging),
+        ]:
+            log_df, starv_df, summary = run_extended_simulation(
+                beds_df, nurses_df, doctors_df, triage_df, method_name, use_aging, method_fn,
+                seed=trial_seed
+            )
+            summary['trial_seed'] = trial_seed
+            all_summaries.append(summary)
+
+
+    results_df = pd.DataFrame(all_summaries)
+    results_df.to_csv('or_multi_trial_raw.csv', index=False)
+
+    agg = results_df.groupby('Method').agg(
+        starvation_mean=('Total Starvation Cases', 'mean'),
+        starvation_max=('Total Starvation Cases', 'max'),
+        critical_starvation_mean=('Starvation Cases Involving Critical (ESI1-2) Patients', 'mean'),
+        critical_starvation_max=('Starvation Cases Involving Critical (ESI1-2) Patients', 'max'),
+        low_acuity_starvation_mean=('Starvation Cases Involving Low Acuity (ESI3-5) Patients', 'mean'),
+        low_acuity_starvation_max=('Starvation Cases Involving Low Acuity (ESI3-5) Patients', 'max'),
+        backlog_mean=('Final Total Waiting Time (hrs, backlog)', 'mean'),
+        backlog_max=('Final Total Waiting Time (hrs, backlog)', 'max'),
+        max_rounds_waited_mean=('Final Max Rounds Waited', 'mean'),
+        avg_los_mean=('Avg LOS (hrs)', 'mean'),
+        staff_util_mean=('Final Staff Utilization %', 'mean'),
+        staff_util_std=('Final Staff Utilization %', 'std'),
+    )
+    print("\n\n=== AGGREGATED ACROSS", N_TRIALS, "TRIALS ===")
+    print(agg.to_string())
+    agg.to_csv('or_multi_trial_summary.csv')
+    print("\nSaved: or_multi_trial_raw.csv, or_multi_trial_summary.csv")
