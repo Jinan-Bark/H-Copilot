@@ -77,6 +77,9 @@ def run_optimizer(patients_df, beds_df, nurses_df, doctors_df, shift, group, dat
             vb = [j for j in B if covers_ward(on_duty_rn.loc[n,'ward_list'], avail_beds.loc[j,'ward_id'])]
             model += y_rn[i,n] <= (pulp.lpSum(x[i,j] for j in vb) if vb else 0)
         model += pulp.lpSum(y_rn[i,n] for n in RN) == pulp.lpSum(x[i,j] for j in B)
+        for n in PN:
+            vb = [j for j in B if covers_ward(on_duty_pn.loc[n,'ward_list'], avail_beds.loc[j,'ward_id'])]
+            model += y_pn[i,n] <= (pulp.lpSum(x[i,j] for j in vb) if vb else 0)
         model += pulp.lpSum(y_pn[i,n] for n in PN) == pulp.lpSum(x[i,j] for j in B)
         for d in D:
             vb = [j for j in B if covers_ward(on_duty_doc.loc[d,'ward_list'], avail_beds.loc[j,'ward_id'])]
