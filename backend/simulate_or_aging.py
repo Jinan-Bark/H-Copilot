@@ -205,7 +205,6 @@ def run_extended_simulation(beds_df, nurses_df, doctors_df, triage_df, method_na
         'Method': method_name,
         'Total Starvation Cases': len(starvation_cases),
         'Starvation Cases Involving Critical (ESI1-2) Patients': sum(1 for c in starvation_cases if c['acuity'] <= 2),
-        'Avg Length of Stay (hrs)': avg_los_hours,
         'Final Bed Utilization %': round_log[-1]['Bed Utilization %'],
         'Final Staff Utilization %': round_log[-1]['Staff Utilization %'],
     }
