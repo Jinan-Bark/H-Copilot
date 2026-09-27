@@ -3,7 +3,7 @@ import pulp
 from datetime import datetime, timezone
 
 acuity_weight    = {1: 100, 2: 50, 3: 20, 4: 5, 5: 1}
-max_wait_minutes = {1: 0, 2: 15, 3: 30, 4: 60, 5: 120}
+max_wait_minutes = {1: 0, 2: 10, 3: 30, 4: 60, 5: 120}
 
 def covers_ward(ward_list, ward_id):
     return str(ward_id) in ward_list
