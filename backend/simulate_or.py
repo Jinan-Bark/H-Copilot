@@ -91,7 +91,7 @@ def run_simulation(beds_df, nurses_df, doctors_df, triage_df, method_fn, method_
             wait_counters[sid] = wait_counters.get(sid, 0) + 1
             if wait_counters[sid] >= STARVATION_THRESHOLD:
                 acuity = still_waiting[still_waiting['stay_id'].astype(str) == sid]['acuity'].values[0]
-                starvation_cases.append({'stay_id': sid, 'acuity': int(acuity), 'rounds_waited': wait_counters[sid], 'round': round_num})
+                starvation_cases.append({'method': method_name, 'stay_id': sid, 'acuity': int(acuity), 'rounds_waited': wait_counters[sid], 'round': round_num})
 
         waiting_pool = still_waiting
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     doctors_df['doctor_id'] = range(1, len(doctors_df) + 1)
     triage_df = pd.read_csv(r"C:\Users\FuJiTsu\Desktop\hcopilot\backend\data\ED_triage.csv")
     triage_df = triage_df.rename(columns={'triage_code': 'stay_id', 'TriageGrade': 'acuity', 'ChiefComplaint': 'chiefcomplaint'})
-    
+
     print("=== Running simulation: OR (ESI-weighted) ===")
     or_log, or_starvation = run_simulation(beds_df, nurses_df, doctors_df, triage_df, run_optimizer, 'OR')
     print(or_log.to_string(index=False))
