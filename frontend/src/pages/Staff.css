@@ -1,0 +1,362 @@
+.staff-page {
+  max-width: 1200px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #64748b;
+}
+
+/* Summary */
+.staff-summary {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.summary-card {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-top: 3px solid;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.summary-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.summary-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Controls */
+.staff-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.tab-group {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 8px 20px;
+  color: #64748b;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: #1a2535;
+  color: #94a3b8;
+}
+
+.tab-btn.active {
+  background: #0d2137;
+  border-color: #00c896;
+  color: #00c896;
+}
+
+.staff-filters {
+  display: flex;
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-group select {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  outline: none;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.filter-group select:focus {
+  border-color: #00c896;
+}
+
+/* Table */
+.table-container {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background: #0d1520;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  border-bottom: 1px solid #1a2535;
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #0d1a2a; }
+
+/* Role Badges */
+.role-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.role-RN {
+  background: rgba(0,150,255,0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(0,150,255,0.2);
+}
+
+.role-PN {
+  background: rgba(168,85,247,0.1);
+  color: #c084fc;
+  border: 1px solid rgba(168,85,247,0.2);
+}
+
+.role-Bed_Admission {
+  background: rgba(236,72,153,0.1);
+  color: #f472b6;
+  border: 1px solid rgba(236,72,153,0.2);
+}
+
+.role-doctor {
+  background: rgba(16,185,129,0.1);
+  color: #34d399;
+  border: 1px solid rgba(16,185,129,0.2);
+}
+
+.role-intern {
+  background: rgba(100,116,139,0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(100,116,139,0.2);
+}
+
+/* Shift Badge */
+.shift-badge {
+  background: rgba(0,150,255,0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(0,150,255,0.2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #00c896;
+  color: #0a0e14;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover { background: #00b384; }
+
+.btn-secondary {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover { background: #1a2535; color: #e2e8f0; }
+
+.btn-edit {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,150,255,0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(0,150,255,0.2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-edit:hover { background: rgba(0,150,255,0.2); }
+
+.btn-deactivate {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239,68,68,0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-deactivate:hover { background: rgba(239,68,68,0.2); }
+
+.btn-reactivate {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,200,150,0.1);
+  color: #00c896;
+  border: 1px solid rgba(0,200,150,0.2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-reactivate:hover { background: rgba(0,200,150,0.2); }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 420px;
+  width: 90%;
+}
+
+.modal-large {
+  max-width: 700px !important;
+  width: 90%;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.78rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group select {
+  background: #0d1520;
+  border: 1px solid #1e2d3d;
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus { border-color: #00c896; }

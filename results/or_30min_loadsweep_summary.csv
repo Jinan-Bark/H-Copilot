@@ -1,0 +1,10 @@
+Load factor,Method,Arrivals (24h),Critical patients ESI1-2 (bedded + unbedded),Starved Patients ESI1-2,Critical within own limit (%),Mean Wait ESI1-2 (min),Wait incl. unbedded ESI1-2 (min),Max Wait ESI1-2 (min),Starved Patients ESI3,Starved Patients ESI4-5,Wait incl. unbedded ESI3 (min),Wait incl. unbedded ESI4-5 (min),Mean Backlog (hrs),Final Max Wait (hrs),Unbedded at End,Mean Bed Utilization %,Trials with zero critical starved (%)
+0.7,FCFS baseline,59.77,25.49,2.2,92.16,6.02,6.28,33.3,1.79,0.2,5.85,6.62,0.33,0.16,0.47,65.3,65.0
+0.7,"OR + Aging (proposed, NOT deployed)",59.77,25.49,1.1,96.11,1.72,1.81,17.1,2.06,0.39,7.51,18.25,0.48,0.32,0.47,65.3,70.0
+0.7,OR without aging (ESI weights only),59.77,25.49,1.04,96.32,1.71,1.81,18.3,1.68,0.37,7.29,19.54,0.58,0.4,0.47,65.3,70.0
+0.85,FCFS baseline,71.72,30.55,8.44,74.22,20.82,23.05,92.7,7.15,0.78,22.37,22.45,1.68,0.97,3.04,76.04,20.0
+0.85,"OR + Aging (proposed, NOT deployed)",71.72,30.55,4.06,87.7,5.4,5.69,45.6,7.92,1.24,31.4,60.33,2.52,1.92,3.04,76.04,29.0
+0.85,OR without aging (ESI weights only),71.72,30.55,3.76,88.57,5.35,5.69,52.8,6.34,1.22,29.87,69.87,3.4,2.84,3.04,76.04,29.0
+1.0,FCFS baseline,84.55,36.08,19.46,47.27,60.46,66.23,195.9,20.09,2.19,67.97,69.03,7.23,2.72,9.5,83.45,2.0
+1.0,"OR + Aging (proposed, NOT deployed)",84.55,36.08,9.57,74.14,12.48,12.9,84.3,20.85,2.71,99.42,176.11,11.02,5.32,9.5,83.45,3.0
+1.0,OR without aging (ESI weights only),84.55,36.08,8.42,77.24,12.29,12.73,107.7,17.5,2.66,94.73,208.66,14.73,8.51,9.5,83.45,3.0

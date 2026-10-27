@@ -1,0 +1,10 @@
+# Extra packages used by notebook 2 and notebook 3 (Google Colab installs most of them already)
+lightgbm
+catboost
+statsmodels
+scikit-learn==1.9.0
+pandas
+numpy
+matplotlib
+xgboost
+tensorflow

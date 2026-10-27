@@ -1,0 +1,207 @@
+.dashboard {
+  max-width: 1200px;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* Alert Banner */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #fca5a5;
+  font-size: 0.875rem;
+  margin-bottom: 24px;
+}
+
+/* Stat Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #111c2d;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #1e2d3d;
+  border-top: 3px solid;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  flex-shrink: 0;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-top: 2px;
+}
+
+/* Section */
+.section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+/* Ward Cards */
+.ward-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ward-card {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.ward-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 12px;
+}
+
+.ward-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+}
+
+.ward-avail { color: #00c896; }
+.ward-occ   { color: #ef4444; }
+
+.progress-bar {
+  height: 6px;
+  background: #1e2d3d;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.ward-rate {
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+/* Table */
+.table-container {
+  background: #111c2d;
+  border: 1px solid #1e2d3d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background: #0d1520;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  border-bottom: 1px solid #1a2535;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: #0d1a2a;
+}
+
+/* Acuity Badges */
+.acuity-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.acuity-1 { background: rgba(239,68,68,0.15);  color: #fca5a5; }
+.acuity-2 { background: rgba(249,115,22,0.15); color: #fdba74; }
+.acuity-3 { background: rgba(234,179,8,0.15);  color: #fde047; }
+.acuity-4 { background: rgba(34,197,94,0.15);  color: #86efac; }
+.acuity-5 { background: rgba(148,163,184,0.15);color: #94a3b8; }
+
+/* Status */
+.status-waiting  { color: #f59e0b; font-size: 0.8rem; font-weight: 600; }
+.status-admitted { color: #00c896; font-size: 0.8rem; font-weight: 600; }
+.status-discharged { color: #64748b; font-size: 0.8rem; font-weight: 600; }

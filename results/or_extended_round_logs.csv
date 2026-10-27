@@ -1,0 +1,19 @@
+Method,Round,Throughput (admitted),Still Waiting,Bed Utilization %,Staff Utilization %,"Total Waiting Time (hrs, backlog)",Max Rounds Waited
+FCFS baseline,1,14,0,56.0,25.0,0.0,0
+FCFS baseline,2,11,3,100.0,25.0,1.5,1
+FCFS baseline,3,0,17,100.0,0.0,10.0,2
+FCFS baseline,4,0,31,100.0,0.0,25.5,3
+FCFS baseline,5,0,45,100.0,0.0,48.0,4
+FCFS baseline,6,0,59,100.0,0.0,77.5,5
+"OR (current, deployed)",1,14,0,56.0,83.3,0.0,0
+"OR (current, deployed)",2,11,3,100.0,75.0,1.5,1
+"OR (current, deployed)",3,0,17,100.0,0.0,10.0,2
+"OR (current, deployed)",4,0,31,100.0,0.0,25.5,3
+"OR (current, deployed)",5,0,45,100.0,0.0,48.0,4
+"OR (current, deployed)",6,0,59,100.0,0.0,77.5,5
+"OR + Aging (proposed, NOT deployed)",1,14,0,56.0,83.3,0.0,0
+"OR + Aging (proposed, NOT deployed)",2,11,3,100.0,75.0,1.5,1
+"OR + Aging (proposed, NOT deployed)",3,0,17,100.0,0.0,10.0,2
+"OR + Aging (proposed, NOT deployed)",4,0,31,100.0,0.0,25.5,3
+"OR + Aging (proposed, NOT deployed)",5,0,45,100.0,0.0,48.0,4
+"OR + Aging (proposed, NOT deployed)",6,0,59,100.0,0.0,77.5,5

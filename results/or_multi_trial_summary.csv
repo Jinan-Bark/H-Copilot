@@ -1,0 +1,4 @@
+Method,starvation_mean,starvation_max,critical_starvation_mean,critical_starvation_max,low_acuity_starvation_mean,low_acuity_starvation_max,backlog_mean,backlog_max,max_rounds_waited_mean,avg_los_mean,staff_util_mean,staff_util_std
+FCFS baseline,20.545,45,8.815,21,11.73,27,29.42,80,0.975,7.388999999999999,40.356,3.087218585226002
+"OR (current, deployed)",20.545,45,0.025,2,20.52,45,57.74,148,3.565,7.388999999999999,74.9945,7.36296721308091
+"OR + Aging (proposed, NOT deployed)",20.545,45,0.025,2,20.52,45,36.98,108,2.155,7.388999999999999,75.03699999999999,7.523412769381489

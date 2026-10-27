@@ -1,0 +1,4 @@
+Method,Starved Patients Total,Starved Patients ESI1-2,Starved Patients ESI3,Starved Patients ESI4-5,Mean Wait ESI1-2 (min),Mean Wait ESI3 (min),Mean Wait ESI4-5 (min),Wait incl. unbedded ESI1-2 (min),Wait incl. unbedded ESI3 (min),Wait incl. unbedded ESI4-5 (min),Patients ESI4-5 (bedded + unbedded),Bedded Patients,Unbedded at End,Mean Backlog (hrs),Final Max Wait (hrs),Final Bed Utilization %,Mean Staff Utilization % (2nd half)
+FCFS baseline,42.37,19.96,20.24,2.17,61.95,63.72,63.71,67.35,68.87,70.34,5.46,75.42,9.62,7.53,2.72,98.6,50.0
+"OR + Aging (proposed, NOT deployed)",33.76,9.77,21.3,2.69,12.72,87.63,144.35,13.28,101.5,181.47,5.46,75.42,9.62,11.43,5.25,98.6,97.65
+OR without aging (ESI weights only),29.12,8.7,17.76,2.66,12.48,69.8,45.96,13.03,96.68,216.89,5.46,75.42,9.62,15.21,8.64,98.6,97.85

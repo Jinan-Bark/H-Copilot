@@ -1,0 +1,7 @@
+**/__pycache__
+**/*.pyc
+.env
+venv
+frontend/node_modules
+notebooks
+results
