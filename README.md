@@ -47,8 +47,7 @@ All results come from the Iranian ED dataset and simulated patient flow and load
 ## Project Layout
 
 ```text
-5_Source_Code_and_Data/  (the repository root)
-│
+H-Copilot/│
 ├── backend/                    FastAPI services and AI integration
 │   ├── database.py             PostgreSQL / SQLAlchemy connection
 │   ├── main.py                 FastAPI entry point
