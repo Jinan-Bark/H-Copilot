@@ -1,0 +1,17 @@
+name: Docker build check
+on: [push, workflow_dispatch]
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start
+        run: docker compose up --build -d
+      - name: Wait for the API
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/ && exit 0
+            sleep 3
+          done
+          docker compose logs backend
+          exit 1
