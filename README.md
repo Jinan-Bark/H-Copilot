@@ -292,6 +292,4 @@ The forecasting models are trained offline and loaded by the platform. They are 
 
 - The final forecasting model uses exactly 15 features, blending Random Forest and Neural Network predictions.
 - Forecasting is evaluated with chronological walk-forward validation, naive baselines, permutation testing and cross-validation.
-- Credentials, API keys, and private clinical data must not be committed. Never upload the real `.env` file; it contains the database password.
 - All results are from simulated patient flow and simulated load, not from a live hospital trial. Extended validation with real hospital data is required before real use.
-- The Docker steps were written for this project but have not been tested on the final folder in the preparation environment.
